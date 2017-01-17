@@ -12,14 +12,26 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     let cellId = "cellId"
     
+    //Creating CollectionView with Closure
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .Horizontal
+        //default space between cells
+        layout.minimumLineSpacing = 0
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = UIColor.redColor()
         cv.dataSource = self
         cv.delegate = self
+        //creates animation like each cell snap to screen
+        cv.pagingEnabled = true
         return cv
     }()
+    
+    //creates an empty array and sets pages into the array
+    let pages: [WalkthrouhPage] = {
+        return []
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +39,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         view.addSubview(collectionView)
         collectionView.anchorTop(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
         
-        collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.registerClass(WalkThroughPageCell.self, forCellWithReuseIdentifier: cellId)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -36,9 +48,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellId, forIndexPath: indexPath)
-        cell.backgroundColor = .blackColor()
         
         return cell
     }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: view.frame.height)
+    }
+    
 }
 
