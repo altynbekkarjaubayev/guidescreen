@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     let cellId = "cellId"
+    let loginCellId = "loginCellId"
     
     //Creating CollectionView with Closure
     lazy var collectionView: UICollectionView = {
@@ -27,11 +28,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return cv
     }()
     
-    let pageControl: UIPageControl = {
+    lazy var pageControl: UIPageControl = {
         let pc = UIPageControl()
         pc.pageIndicatorTintColor = UIColor.lightGrayColor()
         pc.currentPageIndicatorTintColor = UIColor(red: 247/255, green: 154/255, blue: 27/255, alpha: 1)
-        pc.numberOfPages = 3
+        pc.numberOfPages = self.pages.count + 1
         return pc
     }()
     
@@ -77,14 +78,20 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         nextButton.anchor(view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 24, leftConstant: 0, bottomConstant: 0, rightConstant: 16, widthConstant: 0, heightConstant: 44)
         
-        collectionView.registerClass(WalkThroughPageCell.self, forCellWithReuseIdentifier: cellId)
+        registerCells()
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return pages.count
+        return pages.count + 1
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        if indexPath.item == pages.count {
+            let loginCell = collectionView.dequeueReusableCellWithReuseIdentifier(loginCellId, forIndexPath: indexPath)
+            return loginCell
+        }
+        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellId, forIndexPath: indexPath) as! WalkThroughPageCell
         // page degen let sozdovat etp ony pages degen dictionary ten kylyp koid. Sosn WalkthroughPage ga dostup alu uwin WalkThroughPageCell da "page" degen var sozdovat etp sony let pen sozdovat etken page.ben tenestirip koidy
         let page = pages[indexPath.item]
@@ -96,7 +103,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return CGSize(width: view.frame.width, height: view.frame.height)
     }
     
-    func registerCells() {
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let pageNumber = Int(targetContentOffset.memory.x / view.frame.width)
+        pageControl.currentPage = pageNumber
+    }
+    
+    private func registerCells() {
+        collectionView.registerClass(WalkThroughPageCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: loginCellId)
         
     }
     
