@@ -28,7 +28,7 @@ extension UIView {
         }
         
         if let bottom = bottom {
-            bottomAnchor.constraintEqualToAnchor(bottom, constant: bottomConstant).active = true
+            bottomAnchor.constraintEqualToAnchor(bottom, constant: -bottomConstant).active = true
         }
         
         if let left = left {
@@ -36,7 +36,44 @@ extension UIView {
         }
         
         if let right = right {
-            rightAnchor.constraintEqualToAnchor(right, constant: rightConstant).active = true
+            rightAnchor.constraintEqualToAnchor(right, constant: -rightConstant).active = true
         }
     }
+    
+    func anchor(top: NSLayoutYAxisAnchor? = nil, left: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, right: NSLayoutXAxisAnchor? = nil, topConstant: CGFloat = 0, leftConstant: CGFloat = 0, bottomConstant: CGFloat = 0, rightConstant: CGFloat = 0, widthConstant: CGFloat = 0, heightConstant: CGFloat = 0) -> [NSLayoutConstraint]? {
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        var anchors = [NSLayoutConstraint]()
+        
+        if let top = top {
+            anchors.append(topAnchor.constraintEqualToAnchor(top, constant: topConstant))
+        }
+        
+        if let left = left {
+            anchors.append(leftAnchor.constraintEqualToAnchor(left, constant: leftConstant))
+        }
+        
+        if let bottom = bottom {
+            anchors.append(bottomAnchor.constraintEqualToAnchor(bottom, constant: -bottomConstant))
+        }
+        
+        if let right = right {
+            anchors.append(rightAnchor.constraintEqualToAnchor(right, constant: -rightConstant))
+        }
+        
+        if widthConstant > 0 {
+            anchors.append(widthAnchor.constraintEqualToConstant(widthConstant))
+        }
+        
+        if heightConstant > 0 {
+            anchors.append(heightAnchor.constraintEqualToConstant(heightConstant))
+        }
+        
+        anchors.forEach({$0.active = true})
+        
+        return anchors
+    }
+    
+    
 }
