@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E05BD5781E3A1A3E0007B16B /* LoginCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05BD5771E3A1A3E0007B16B /* LoginCell.swift */; };
 		E0C171201E2CC21700C945F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C1711F1E2CC21700C945F0 /* AppDelegate.swift */; };
 		E0C171221E2CC21700C945F0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C171211E2CC21700C945F0 /* ViewController.swift */; };
 		E0C171251E2CC21700C945F0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0C171231E2CC21700C945F0 /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E05BD5771E3A1A3E0007B16B /* LoginCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginCell.swift; sourceTree = "<group>"; };
 		E0C1711C1E2CC21700C945F0 /* Walkthrough Screen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Walkthrough Screen.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0C1711F1E2CC21700C945F0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0C171211E2CC21700C945F0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				E0C171331E2CDBFB00C945F0 /* WalkthroughPageCell.swift */,
+				E05BD5771E3A1A3E0007B16B /* LoginCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -181,6 +184,7 @@
 				E0C171321E2CD4AE00C945F0 /* Helpers.swift in Sources */,
 				E0C1713A1E2DF53600C945F0 /* WalkthrouhPage.swift in Sources */,
 				E0C171201E2CC21700C945F0 /* AppDelegate.swift in Sources */,
+				E05BD5781E3A1A3E0007B16B /* LoginCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +336,7 @@
 				E0C171301E2CC21700C945F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

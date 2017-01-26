@@ -69,6 +69,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        observeKeyboardNotifiations()
+        
         view.addSubview(collectionView)
         view.addSubview(pageControl)
         view.addSubview(skipButton)
@@ -107,6 +109,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return CGSize(width: view.frame.width, height: view.frame.height)
     }
     
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        view.endEditing(true)
+    }
+    
     func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let pageNumber = Int(targetContentOffset.memory.x / view.frame.width)
         pageControl.currentPage = pageNumber
@@ -132,8 +138,26 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     private func registerCells() {
         collectionView.registerClass(WalkThroughPageCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: loginCellId)
+        collectionView.registerClass(LoginCell.self, forCellWithReuseIdentifier: loginCellId)
         
+    }
+    
+    private func observeKeyboardNotifiations() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardShow), name: UIKeyboardWillShowNotification, object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardHide), name: UIKeyboardWillHideNotification, object: nil)
+
+    }
+    func keyboardShow() {
+UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseOut, animations: { 
+    self.view.frame = CGRect(x: 0, y: -60, width: self.view.frame.width, height: self.view.frame.height)
+    }, completion: nil)
+    }
+    
+    func keyboardHide() {
+        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+            }, completion: nil)
     }
     
 }
