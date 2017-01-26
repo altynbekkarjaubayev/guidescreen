@@ -36,19 +36,45 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return pc
     }()
     
-    let skipButton: UIButton = {
+    lazy var skipButton: UIButton = {
         let sButton = UIButton(type: UIButtonType.System)
         sButton.setTitle("Skip", forState: UIControlState.Normal)
         sButton.setTitleColor(UIColor(red: 247/255, green: 154/255, blue: 27/255, alpha: 1), forState: .Normal)
+        sButton.addTarget(self, action: #selector(skipPage), forControlEvents: UIControlEvents.TouchUpInside)
         return sButton
     }()
     
-    let nextButton: UIButton = {
+    lazy var nextButton: UIButton = {
         let nButton = UIButton(type: UIButtonType.System)
         nButton.setTitle("Next", forState: UIControlState.Normal)
         nButton.setTitleColor(UIColor(red: 247/255, green: 154/255, blue: 27/255, alpha: 1), forState: .Normal)
+        nButton.addTarget(self, action: #selector(nextPage), forControlEvents: UIControlEvents.TouchUpInside)
         return nButton
     }()
+    
+    func nextPage() {
+        if pageControl.currentPage == pages.count {
+            return
+        }
+        
+        if pageControl.currentPage == pages.count - 1 {
+            moveContraintsOffScreen()
+            
+            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+                self.view.layoutIfNeeded()
+                }, completion: nil)
+        }
+        
+        let indexPath = NSIndexPath(forItem: pageControl.currentPage + 1, inSection: 0)
+        collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: true)
+        pageControl.currentPage += 1
+    }
+    
+    func skipPage() {
+        pageControl.currentPage = pages.count - 1
+        nextPage()
+        
+    }
     
     //creates an empty array and sets pages into the array
     let pages: [WalkthrouhPage] = {
@@ -118,11 +144,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         pageControl.currentPage = pageNumber
         
         if pageNumber == pages.count {
-            pageControlBottomAnchor?.constant = 40
-            skipButtonTopAnchor?.constant = -40
-            nextButtonTopAnchor?.constant = -40
+            moveContraintsOffScreen()
             
-            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseOut, animations: { 
+            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseOut, animations: {
                 self.view.layoutIfNeeded()
                 }, completion: nil)
         } else {
@@ -136,6 +160,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    private func moveContraintsOffScreen() {
+        pageControlBottomAnchor?.constant = 40
+        skipButtonTopAnchor?.constant = -40
+        nextButtonTopAnchor?.constant = -40
+    }
+    
     private func registerCells() {
         collectionView.registerClass(WalkThroughPageCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.registerClass(LoginCell.self, forCellWithReuseIdentifier: loginCellId)
@@ -146,12 +176,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardShow), name: UIKeyboardWillShowNotification, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(keyboardHide), name: UIKeyboardWillHideNotification, object: nil)
-
+        
     }
     func keyboardShow() {
-UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseOut, animations: { 
-    self.view.frame = CGRect(x: 0, y: -60, width: self.view.frame.width, height: self.view.frame.height)
-    }, completion: nil)
+        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+            self.view.frame = CGRect(x: 0, y: -60, width: self.view.frame.width, height: self.view.frame.height)
+            }, completion: nil)
     }
     
     func keyboardHide() {
