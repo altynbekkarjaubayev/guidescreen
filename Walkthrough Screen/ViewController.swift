@@ -62,6 +62,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }()
     
     var pageControlBottomAnchor: NSLayoutConstraint?
+    var skipButtonTopAnchor: NSLayoutConstraint?
+    var nextButtonTopAnchor: NSLayoutConstraint?
     
     
     override func viewDidLoad() {
@@ -76,9 +78,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         pageControlBottomAnchor = pageControl.anchor(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 30)[1]
         
-        skipButton.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: 24, leftConstant: 16, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 44)
+        skipButtonTopAnchor = skipButton.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: 24, leftConstant: 16, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 44).first
         
-        nextButton.anchor(view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 24, leftConstant: 0, bottomConstant: 0, rightConstant: 16, widthConstant: 0, heightConstant: 44)
+        nextButtonTopAnchor = nextButton.anchor(view.topAnchor, left: nil, bottom: nil, right: view.rightAnchor, topConstant: 24, leftConstant: 0, bottomConstant: 0, rightConstant: 16, widthConstant: 0, heightConstant: 44).first
         
         registerCells()
     }
@@ -108,6 +110,24 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let pageNumber = Int(targetContentOffset.memory.x / view.frame.width)
         pageControl.currentPage = pageNumber
+        
+        if pageNumber == pages.count {
+            pageControlBottomAnchor?.constant = 40
+            skipButtonTopAnchor?.constant = -40
+            nextButtonTopAnchor?.constant = -40
+            
+            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseOut, animations: { 
+                self.view.layoutIfNeeded()
+                }, completion: nil)
+        } else {
+            pageControlBottomAnchor?.constant = 0
+            skipButtonTopAnchor?.constant = 16
+            nextButtonTopAnchor?.constant = 16
+            
+            UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+                self.view.layoutIfNeeded()
+                }, completion: nil)
+        }
     }
     
     private func registerCells() {
