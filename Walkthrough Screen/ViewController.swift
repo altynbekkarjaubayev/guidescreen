@@ -180,7 +180,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     func keyboardShow() {
         UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions.CurveEaseOut, animations: {
-            self.view.frame = CGRect(x: 0, y: -60, width: self.view.frame.width, height: self.view.frame.height)
+            let y: CGFloat = UIDevice.currentDevice().orientation.isLandscape ? -100 : -60
+            self.view.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height)
             }, completion: nil)
     }
     
@@ -189,6 +190,22 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
             }, completion: nil)
     }
+    
+    
+    
+    override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        collectionView.collectionViewLayout.invalidateLayout()
+        
+        let indexPath = NSIndexPath(forItem: pageControl.currentPage, inSection: 0)
+        //scroll to indexPath after rotation is going
+        dispatch_async(dispatch_get_main_queue()) { 
+            self.collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: true)
+            self.collectionView.reloadData()
+
+        }
+    
+    }
+    
     
 }
 
